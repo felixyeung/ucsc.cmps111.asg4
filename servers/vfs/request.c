@@ -23,17 +23,18 @@
 #include "vnode.h"
 #include "path.h"
 #include "param.h"
-
+#include <stdio.h>
 
 /*===========================================================================*
  *			req_setkey							 *
  *===========================================================================*/
-PUBLIC int req_setkey(int fs_e, )
+PUBLIC int req_setkey(int fs_e)
 {
   message m;
-  
-  m.m_type = REQ_SETKEY;
   int r;
+  printf("in req_setkey\n");
+  m.m_type = REQ_SETKEY;
+ 
   r = fs_sendrec(fs_e, &m);
   
   return(r);

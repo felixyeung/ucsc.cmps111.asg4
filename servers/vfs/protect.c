@@ -18,12 +18,31 @@
 #include <minix/vfsif.h>
 #include "vnode.h"
 #include "vmnt.h"
+#include <stdio.h>
 
 /*===========================================================================*
  *				do_setkey					 *
  *===========================================================================*/
 PUBLIC int do_setkey()
 {
+  struct vmnt *vmp;
+  int r = OK;
+  
+  printf("in do_setkey\n");
+
+  for (vmp = &vmnt[0]; vmp < &vmnt[NR_MNTS]; ++vmp) {
+	if (vmp->m_dev != NO_DEV && vmp->m_fs_e != NONE &&
+		 vmp->m_root_node != NULL) {
+		if ((r = lock_vmnt(vmp, VMNT_EXCL)) != OK)
+			break;
+		req_setkey(vmp->m_fs_e);
+		unlock_vmnt(vmp);
+	}
+  }
+
+  printf("out of req_setkey\n");
+  
+  return(r);
   
 }
 
