@@ -72,6 +72,7 @@ _PROTOTYPE( int search_dir, (struct inode *ldir_ptr,
 _PROTOTYPE( int fs_chmod, (void)					);
 _PROTOTYPE( int fs_chown, (void)					);
 _PROTOTYPE( int fs_getdents, (void)					);
+_PROTOTYPE( int fs_setkey, (void)					);
 _PROTOTYPE( int forbidden, (struct inode *rip, mode_t access_desired)	);
 _PROTOTYPE( int read_only, (struct inode *ip)				);
 

@@ -13,7 +13,7 @@ struct keyValuePair {
 };
 
 //this is a "presistent" set of usr/key pairs
-static struct keyValuePair pairs[8];
+//static struct keyValuePair pairs[8];
 
 /*===========================================================================*
  *				fs_chmod				     *
@@ -165,9 +165,16 @@ struct inode *ip;		/* ptr to inode whose file sys is to be cked */
   return(sp->s_rd_only ? EROFS : OK);
 }
 
-PUBLIC int do_setkey(void) {
+
+/*===========================================================================*
+ *				fs_setkey					*
+ *===========================================================================*/
+ PUBLIC int fs_setkey(void) {
+	return 2;
+ }
+//PUBLIC int do_setkey(void) {
 	/* some other sys call tells us the following: */
-	uid_t caller_uid = (uid_t) fs_m_in.REQ_UID;
+	/*uid_t caller_uid = (uid_t) fs_m_in.REQ_UID;
 	
 	unsigned int k0 = m_in.m1_i1;
 	unsigned int k1 = m_in.m1_i2;
@@ -191,7 +198,7 @@ PRIVATE void setKeyAtIdx(int idx, uid_t cllr_id, unsigned int k0, unsigned int k
 	int i;
 	if (k0 == 0 && k1 == 0) {
 		pairs[idx]->user = 0;
-		/* only the second half of the byte array is used */
+		 only the second half of the byte array is used
 		pairs[idx]->k0 = 0;
 		pairs[idx]->k1 = 0;
 	}
@@ -209,4 +216,4 @@ PUBLIC void do_initkeys(void) {
 		pairs[i]->k0 = 0;
 		pairs[i]->k1 = 0;
 	}
-}
+}*/
