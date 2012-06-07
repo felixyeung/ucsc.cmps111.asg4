@@ -169,7 +169,7 @@ struct inode *ip;		/* ptr to inode whose file sys is to be cked */
 /*===========================================================================*
  *				fs_setkey					*
  *===========================================================================*/
- PUBLIC int fs_setkey(void) {
+ PUBLIC int fs_setkey() {
 	return 2;
  }
 //PUBLIC int do_setkey(void) {

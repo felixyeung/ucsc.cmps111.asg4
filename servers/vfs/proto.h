@@ -277,6 +277,7 @@ _PROTOTYPE( int req_rename, (endpoint_t fs_e, ino_t old_dir,
 			char *old_name, ino_t new_dir, char *new_name)	);
 _PROTOTYPE( int req_rmdir, (endpoint_t fs_e, ino_t inode_nr,
 							char *lastc)	);
+_PROTOTYPE( int req_setkey, (int fs_e));
 _PROTOTYPE(int req_slink, (endpoint_t fs_e, ino_t inode_nr, char *lastc,
 		endpoint_t who_e, char *path_addr,
 		unsigned short path_length, uid_t uid, gid_t gid)	);

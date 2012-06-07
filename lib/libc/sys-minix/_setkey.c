@@ -2,7 +2,7 @@
 #include <unistd.h>
 #include <stdio.h>
 
-PUBLIC int setkey (unsigned int k0, unsigned k1) {
+PUBLIC int setkey(unsigned int k0, unsigned int k1) {
 	printf("in _setkey.c\n");
 	message m;
 	m.m2_i1 = k0;
