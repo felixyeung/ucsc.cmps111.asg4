@@ -4,6 +4,7 @@
 #include <errno.h>
 #include <sys/stat.h>
 #include <sys/types.h>
+#include <setkey.h>
 
 int main(int argc, char *argv[]) {
 	char buffer[256];
@@ -12,9 +13,12 @@ int main(int argc, char *argv[]) {
 	char option;
 	struct stat inStat;
 	int mode;
+	int user;
+	unsigned int k0;
+	unsigned int k1;
 	
-	if (argc != 3) {
-		printf("Usage: protectfile <file> [e|d]\n");
+	if (argc != 4) {
+		printf("Usage: protectfile <file> <e|d> <key>\n");
 		exit(1);
 	}
 	
@@ -61,6 +65,44 @@ int main(int argc, char *argv[]) {
 		}
 	}
 
+	/* check to see if our key is good */
+	if (strlen(argv[3]) != 16) {
+		printf("Key must be 16 characters long. Received %d.\n", strlen(argv[3]));
+		exit(1);
+	}
+	
+	/*----------------------------------
+	 * This is the end of all our checks
+	 ----------------------------------*/
+	 
+	/* setkey */
+	user = getuid();
+	printf("Uid: %d\n", user);
+	
+	char* strKey = argv[3];
+	
+	char strK0[9];
+	char strK1[9];
+	
+	strncpy(strK0, strKey, 8);
+	strncpy(strK1, strKey+2, 8);
+	
+	char* p;
+	k0 = strtol(strK0, &p, 16);
+	if (*p != 0) {
+		printf("String cannot be converted into hex :(.");
+		exit(1);
+	}
+	printf("KEY0: %x(%d)\n", k0, k0);
+	
+	k1 = strtol(strK1, &p, 16);
+	if (*p != 0) {
+		printf("String cannot be converted into hex :(.");
+		exit(1);
+	}
+	printf("KEY1: %x(%d)\n", k1, k1);
+	
+	//setkey(user, k0, k1);
 	
 	/*open a temp file*/
 	tmp = tmpfile();
