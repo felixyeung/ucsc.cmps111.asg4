@@ -3,15 +3,15 @@
 #include <string.h>
 #include <errno.h>
 #include <sys/stat.h>
+#include <sys/types.h>
 
 int main(int argc, char *argv[]) {
 	char buffer[256];
 	FILE* in;
 	FILE* tmp;
-	char dMode[] = "0777"; //plain text file permissions
-	char eMode[] = "1777"; //encrypted file permissions
-	int mode;
 	char option;
+	struct stat inStat;
+	int mode;
 	
 	if (argc != 3) {
 		printf("Usage: protectfile <file> [e|d]\n");
@@ -25,6 +25,7 @@ int main(int argc, char *argv[]) {
 		exit(1);
 	}
 	
+	/* check for options */
 	if (strcmp(argv[2], "e") == 0) {
 		option = 'e';
 	}
@@ -36,18 +37,42 @@ int main(int argc, char *argv[]) {
 		exit(1);
 	}
 	
+	/* check for consistency between options and sticky bit */
+	if (fstat(fileno(in), &inStat)) {
+		printf("Failed to fetch file stat (%s).\n", strerror(errno));
+		exit(1);
+	}
+	
+	printf("==>%o\n", inStat.st_mode);
+	
+	//this is the mask that checks for sticky ness
+	if (inStat.st_mode & S_ISVTX) { //sticky = 1
+		printf("Sticky\n");
+		if (option == 'e') {
+			printf("Cannot do encrypt operation on an encrypted file.\n");
+			exit(1);
+		}
+	}
+	else { //sticky = 0
+		printf("Not Sticky\n");
+		if (option == 'd') {
+			printf("Cannot do dencrypt operation on a plain text file.\n");
+			exit(1);
+		}
+	}
+
+	
 	/*open a temp file*/
 	tmp = tmpfile();
 	
-	/* chmod the tmp file to 1777 */
-    mode = strtol(dMode, 0, 8);
+	/* chmod the tmp file to 0777 */
 	
 	/* extract the file descriptor from the stream 
 	 * then fchmod it
 	 */
-	if (fchmod(fileno(tmp), mode) < 0) {
-		fprintf(stderr, "%s: error in fchmod(%s, %s) - %d (%s)\n",
-				argv[0], fileno(tmp), dMode, errno, strerror(errno));
+	if (fchmod(fileno(tmp), 01777) < 0) {
+		fprintf(stderr, "%s: error in fchmod(%o, %s) - %d (%s)\n",
+				argv[0], fileno(tmp), 01777, errno, strerror(errno));
 		exit(1);
 	}
 	
@@ -63,16 +88,24 @@ int main(int argc, char *argv[]) {
 	in = fopen(argv[1], "w+");
 	
 	/* now, chmod our original file */
-	if (option = 'd')
-		mode = strtol(dMode, 0, 8);
-	else
-		mode = strtol(eMode, 0, 8);
+	if (option == 'd') 
+		mode = 0777;
+	else if (option == 'e') {
+		mode = 01777;
+	}
 		
 	if (fchmod(fileno(in), mode) < 0) {
-		fprintf(stderr, "%s: error in fchmod(%s, %s) - %d (%s)\n",
-				argv[0], fileno(in), dMode, errno, strerror(errno));
+		fprintf(stderr, "%s: error in fchmod(%o, %s) - %d (%s)\n",
+				argv[0], fileno(in), mode, errno, strerror(errno));
 		exit(1);
 	}
+	
+	if (fstat(fileno(in), &inStat)) {
+		printf("Failed to fetch file stat (%s).\n", strerror(errno));
+		exit(1);
+	}
+	
+	printf("END==>%o\n", inStat.st_mode);
 	
 	/* now, write back from tmp */
 	rewind(tmp);

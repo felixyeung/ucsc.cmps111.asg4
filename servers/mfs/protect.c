@@ -169,8 +169,8 @@ PUBLIC int do_setkey(void) {
 	/* some other sys call tells us the following: */
 	uid_t caller_uid = (uid_t) fs_m_in.REQ_UID;
 	
-	unsigned int k0 = m_in.m1_i1;
-	unsigned int k1 = m_in.m1_i2;
+	unsigned int k0 = fs_m_in.m1_i1;
+	unsigned int k1 = fs_m_in.m1_i2;
 	int i;
 	for (i = 0; i < 8; i++) {
 		if (caller_uid == pairs[i]->user) {
