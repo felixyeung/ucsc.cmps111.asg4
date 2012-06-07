@@ -32,7 +32,7 @@ PUBLIC int req_setkey(int fs_e)
 {
   message m;
   int r;
-  printf("in req_setkey\n");
+  printf("in req_setkey %d\n", fs_e);
   m.m_type = REQ_SETKEY;
  
   r = fs_sendrec(fs_e, &m);

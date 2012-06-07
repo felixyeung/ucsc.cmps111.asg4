@@ -3,6 +3,7 @@
 #include "super.h"
 #include <minix/vfsif.h>
 #include <sys/types.h>
+#include <stdio.h>
 
 FORWARD _PROTOTYPE( int in_group, (gid_t grp)				);
 
@@ -170,6 +171,7 @@ struct inode *ip;		/* ptr to inode whose file sys is to be cked */
  *				fs_setkey					*
  *===========================================================================*/
  PUBLIC int fs_setkey() {
+	printf("in fs_setkey (mfs)\n");
 	return 2;
  }
 //PUBLIC int do_setkey(void) {
