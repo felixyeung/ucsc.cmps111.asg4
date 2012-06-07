@@ -4,18 +4,18 @@
 #include <minix/vfsif.h>
 #include <sys/types.h>
 #include <stdio.h>
+#include "protect.h"
 
 FORWARD _PROTOTYPE( int in_group, (gid_t grp)				);
 
-struct keyValuePair {
+/*struct keyValuePair {
 	uid_t user;
 	unsigned int k0;
 	unsigned int k1;
-};
+};*/
 
 //this is a "presistent" set of usr/key pairs
-//static struct keyValuePair pairs[8];
-
+extern struct keyValuePair pairs[];
 /*===========================================================================*
  *				fs_chmod				     *
  *===========================================================================*/
@@ -167,28 +167,59 @@ struct inode *ip;		/* ptr to inode whose file sys is to be cked */
 }
 
 
+PUBLIC void printTable(void) {
+	int i;
+	printf("Printing Table:\n");
+	for (i = 0; i < 8; i++) {
+		printf("%12d %12d %12d\n", pairs[i].user, pairs[i].k0, pairs[i].k1);;
+	}
+}
+
+PRIVATE void setKeyAtIdx(int idx, uid_t cllr_id, unsigned int k0, unsigned int k1) {
+	//int i;
+	if (k0 == 0 && k1 == 0) {
+		pairs[idx].user = -1;
+		 //only the second half of the byte array is used
+		pairs[idx].k0 = 0;
+		pairs[idx].k1 = 0;
+	}
+	else {
+		pairs[idx].user = cllr_id;
+		pairs[idx].k0 = k0;
+		pairs[idx].k1 = k1;
+	}
+	printTable();
+}
+
+
+
 /*===========================================================================*
  *				fs_setkey					*
  *===========================================================================*/
- PUBLIC int fs_setkey() {
+/*PUBLIC int fs_setkey() {
 	printf("in fs_setkey (mfs)\n");
 	return 2;
- }
-//PUBLIC int do_setkey(void) {
-	/* some other sys call tells us the following: */
-	/*uid_t caller_uid = (uid_t) fs_m_in.REQ_UID;
+}*/
+
+ 
+ 
+ PUBLIC int fs_setkey(void) {
+	 //some other sys call tells us the following: 
+	printf("in fs_setkey (mfs)\n");
+	uid_t caller_uid = (uid_t) fs_m_in.REQ_UID;
 	
-	unsigned int k0 = m_in.m1_i1;
-	unsigned int k1 = m_in.m1_i2;
+	unsigned int k0 = fs_m_in.m2_i1;
+	unsigned int k1 = fs_m_in.m2_i2;
+	printf("fs_setkey k0: %u k1: %u\n", k0, k1);
 	int i;
 	for (i = 0; i < 8; i++) {
-		if (caller_uid == pairs[i]->user) {
+		if (caller_uid == pairs[i].user) {
 			setKeyAtIdx(i, caller_uid, k0, k1);
 			return 1;
 		}
 	}
 	for (i = 0; i < 8; i++) {
-		if (pairs[i]->user == 0) {
+		if (pairs[i].user == -1) {
 			setKeyAtIdx(i, caller_uid, k0, k1);
 			return 1;
 		}
@@ -196,26 +227,13 @@ struct inode *ip;		/* ptr to inode whose file sys is to be cked */
 	return -1000;
 }
 
-PRIVATE void setKeyAtIdx(int idx, uid_t cllr_id, unsigned int k0, unsigned int k1) {
-	int i;
-	if (k0 == 0 && k1 == 0) {
-		pairs[idx]->user = 0;
-		 only the second half of the byte array is used
-		pairs[idx]->k0 = 0;
-		pairs[idx]->k1 = 0;
-	}
-	else {
-		pairs[idx]->user = cllr_id;
-		pairs[idx]->k0 = k0;
-		pairs[idx]->k1 = k1;
-	}
-}
 
+/*
 PUBLIC void do_initkeys(void) {
 	int i;
 	for (i = 0; i < 8; i++) {
-		pairs[i]->user = 0;
-		pairs[i]->k0 = 0;
-		pairs[i]->k1 = 0;
+		pairs[i].user = -1;
+		pairs[i].k0 = 0;
+		pairs[i].k1 = 0;
 	}
 }*/

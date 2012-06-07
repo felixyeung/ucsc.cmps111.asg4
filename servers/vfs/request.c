@@ -28,12 +28,14 @@
 /*===========================================================================*
  *			req_setkey							 *
  *===========================================================================*/
-PUBLIC int req_setkey(int fs_e)
+PUBLIC int req_setkey(int fs_e, unsigned int k0, unsigned int k1)
 {
   message m;
   int r;
   printf("in req_setkey %d\n", fs_e);
   m.m_type = REQ_SETKEY;
+  m.m2_i1 = k0;
+  m.m2_i2 = k1;
  
   r = fs_sendrec(fs_e, &m);
   

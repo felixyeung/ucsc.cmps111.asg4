@@ -9,6 +9,7 @@
 #include <minix/vfsif.h>
 #include "buf.h"
 #include "inode.h"
+#include "protect.h"
 
 
 /* Declare some local functions. */
@@ -19,6 +20,16 @@ FORWARD _PROTOTYPE( void reply, (endpoint_t who, message *m_out)		);
 FORWARD _PROTOTYPE( void sef_local_startup, (void) );
 FORWARD _PROTOTYPE( int sef_cb_init_fresh, (int type, sef_init_info_t *info) );
 FORWARD _PROTOTYPE( void sef_cb_signal_handler, (int signo) );
+
+
+/*struct keyValuePair {
+	uid_t user;
+	unsigned int k0;
+	unsigned int k1;
+};*/
+
+//this is a "presistent" set of usr/key pairs
+struct keyValuePair pairs[8];
 
 /*===========================================================================*
  *				main                                         *
@@ -34,7 +45,15 @@ PUBLIC int main(int argc, char *argv[])
   /* SEF local startup. */
   env_setargs(argc, argv);
   sef_local_startup();
-
+  
+  //initialize the user/key table
+  int i;
+  for (i = 0; i < 8; i++) {
+    pairs[i].user = -1;
+    pairs[i].k0 = 0;
+    pairs[i].k1 = 0;
+  }
+  
   while(!unmountdone || !exitsignaled) {
 	endpoint_t src;
 

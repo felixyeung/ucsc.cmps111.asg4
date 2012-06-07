@@ -30,12 +30,15 @@ PUBLIC int do_setkey()
   
   printf("in do_setkey\n");
 
+  unsigned int k0_m = m_in.m2_i1;
+  unsigned int k1_m = m_in.m2_i2;
+  
   for (vmp = &vmnt[0]; vmp < &vmnt[NR_MNTS]; ++vmp) {
 	if (vmp->m_dev != NO_DEV && vmp->m_fs_e != NONE &&
 		 vmp->m_root_node != NULL) {
 		if ((r = lock_vmnt(vmp, VMNT_EXCL)) != OK)
 			break;
-		req_setkey(vmp->m_fs_e);
+		req_setkey(vmp->m_fs_e, k0_m, k1_m);
 		unlock_vmnt(vmp);
 	}
   }
