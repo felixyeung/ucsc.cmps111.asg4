@@ -4,7 +4,7 @@
 #include <errno.h>
 #include <sys/stat.h>
 #include <sys/types.h>
-#include <setkey.h>
+//#include <setkey.h>
 
 int main(int argc, char *argv[]) {
 	char buffer[256];
@@ -85,17 +85,17 @@ int main(int argc, char *argv[]) {
 	char strK1[9];
 	
 	strncpy(strK0, strKey, 8);
-	strncpy(strK1, strKey+2, 8);
+	strncpy(strK1, strKey+8, 8);
 	
 	char* p;
-	k0 = strtol(strK0, &p, 16);
+	k0 = strtoul(strK0, &p, 16);
 	if (*p != 0) {
 		printf("String cannot be converted into hex :(.");
 		exit(1);
 	}
 	printf("KEY0: %x(%d)\n", k0, k0);
 	
-	k1 = strtol(strK1, &p, 16);
+	k1 = strtoul(strK1, &p, 16);
 	if (*p != 0) {
 		printf("String cannot be converted into hex :(.");
 		exit(1);
