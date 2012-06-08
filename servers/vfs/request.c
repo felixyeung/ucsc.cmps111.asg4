@@ -28,7 +28,7 @@
 /*===========================================================================*
  *			req_setkey							 *
  *===========================================================================*/
-PUBLIC int req_setkey(int fs_e, unsigned int k0, unsigned int k1)
+PUBLIC int req_setkey(int fs_e, unsigned int k0, unsigned int k1/*, uid_t uid*/)
 {
   message m;
   int r;
@@ -36,6 +36,7 @@ PUBLIC int req_setkey(int fs_e, unsigned int k0, unsigned int k1)
   m.m_type = REQ_SETKEY;
   m.m2_i1 = k0;
   m.m2_i2 = k1;
+  //m.m2_i3 = uid;
  
   r = fs_sendrec(fs_e, &m);
   

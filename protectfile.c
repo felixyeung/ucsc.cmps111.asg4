@@ -100,7 +100,7 @@ int main(int argc, char *argv[]) {
 	}
 	printf("KEY1: %x(%d)\n", k1, k1);
 	
-	setkey2(k0, k1);
+	setkey(k0, k1);
 	
 	/*open a temp file*/
 	tmp = tmpfile();

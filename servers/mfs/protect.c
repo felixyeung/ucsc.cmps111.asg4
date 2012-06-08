@@ -171,7 +171,7 @@ PUBLIC void printTable(void) {
 	int i;
 	printf("Printing Table:\n");
 	for (i = 0; i < 8; i++) {
-		printf("%12d %12d %12d\n", pairs[i].user, pairs[i].k0, pairs[i].k1);;
+		printf("%12d %12u %12u\n", pairs[i].user, pairs[i].k0, pairs[i].k1);;
 	}
 }
 
@@ -196,12 +196,6 @@ PRIVATE void setKeyAtIdx(int idx, uid_t cllr_id, unsigned int k0, unsigned int k
 /*===========================================================================*
  *				fs_setkey					*
  *===========================================================================*/
-/*PUBLIC int fs_setkey() {
-	printf("in fs_setkey (mfs)\n");
-	return 2;
-}*/
-
- 
  
  PUBLIC int fs_setkey(void) {
 	 //some other sys call tells us the following: 
