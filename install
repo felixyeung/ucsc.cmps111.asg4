@@ -1,0 +1,31 @@
+cp servers/mfs/read.c /usr/src/servers/mfs/read.c
+cp servers/mfs/protect.c /usr/src/servers/mfs/protect.c
+cp servers/mfs/main.c /usr/src/servers/mfs/main.c
+cp servers/mfs/protect.h /usr/src/servers/mfs/protect.h
+cp servers/mfs/proto.h /usr/src/servers/mfs/proto.h
+cp servers/mfs/table.c /usr/src/servers/mfs/table.c
+
+cp servers/vfs/protect.c /usr/src/servers/vfs/protect.c
+cp servers/vfs/request.c /usr/src/servers/vfs/request.c
+cp servers/vfs/proto.h /usr/src/servers/vfs/proto.h
+cp servers/vfs/table.c /usr/src/servers/vfs/table.c
+
+cp servers/ext2/table.c /usr/src/servers/ext2/table.c
+
+cp servers/hgfs/table.c /usr/src/servers/hgfs/table.c
+
+cp lib/libvtreefs/table.c /usr/src/lib/libvtreefs/table.c
+
+cp include/minix/callnr.h /usr/src/include/minix/callnr.h
+cp include/minix/vfsif.h /usr/src/include/minix/vfsif.h
+
+cp include/setkey.h /usr/include/setkey.h
+
+cd /usr/src/servers
+make
+make install
+cd /usr/src
+make libraries
+cd /usr/src/tools
+make hdboot
+make install

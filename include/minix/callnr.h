@@ -1,3 +1,9 @@
+/* 
+ * Adam Poit (apoit@ucsc.edu)
+ * Shang Hua Wu (swu14@ucsc.edu)
+ * Felix Yeung (fyeung@ucsc.edu)
+ */
+
 #define NCALLS		 114	/* number of system calls allowed */
 
 /* In case it isn't obvious enough: this list is sorted numerically. */

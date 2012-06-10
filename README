@@ -1,0 +1,43 @@
+1. Installation instructions
+
+	a. From the project directory, run ./install. This should copy
+	   the files to their correct locations and rebuild the system
+	b. Run shutdown -r to reboot the system
+
+2. Testing Instructions
+	a. From the project directory, run make. This will build
+	   protectfile and setkeytest
+	b. Run protectfile filename e key
+	   This will encrypt a file and change its
+	   sticky bit accordingly
+	c. Use cat on the file to see its encrypted contents
+	d. Use setkeytest key
+	   This will set the calling users key to the specified
+	   key
+	e. Use cat on the file to see its unencrypted contents
+	f. Use setkeytest 0
+	   This will disable encryption for the user
+	g. Use cat on the file to once again see its encrypted contents
+	h. Run protectfile filename d key
+	   This will decrypt a file and change its sticky bit
+	   accordingly
+	i. Use cat on the file to once again see its unencrypted contents
+
+3. List of changed files
+
+/usr/src/servers/mfs/read.c
+/usr/src/servers/mfs/protect.c
+/usr/src/servers/mfs/main.c
+/usr/src/servers/mfs/protect.h
+/usr/src/servers/mfs/proto.h
+/usr/src/servers/mfs/table.c
+/usr/src/servers/vfs/protect.c
+/usr/src/servers/vfs/request.c
+/usr/src/servers/vfs/proto.h
+/usr/src/servers/vfs/table.c
+/usr/src/servers/ext2/table.c
+/usr/src/servers/hgfs/table.c
+/usr/src/lib/libvtreefs/table.c
+/usr/src/include/minix/callnr.h
+/usr/src/include/minix/vfsif.h
+/usr/include/setkey.h

@@ -1,3 +1,9 @@
+/* 
+ * Adam Poit (apoit@ucsc.edu)
+ * Shang Hua Wu (swu14@ucsc.edu)
+ * Felix Yeung (fyeung@ucsc.edu)
+ */
+
 #include "fs.h"
 #include "inode.h"
 #include "super.h"
@@ -167,13 +173,13 @@ struct inode *ip;		/* ptr to inode whose file sys is to be cked */
 }
 
 
-PUBLIC void printTable(void) {
+/*PUBLIC void printTable(void) {
 	int i;
 	printf("Printing Table:\n");
-	for (i = 0; i < 8; i++) {
+	for (i = 0; i < 2; i++) {
 		printf("%12d %12u %12u\n", pairs[i].user, pairs[i].k0, pairs[i].k1);;
 	}
-}
+}*/
 
 PRIVATE void setKeyAtIdx(int idx, uid_t cllr_id, unsigned int k0, unsigned int k1) {
 	//int i;
@@ -188,7 +194,7 @@ PRIVATE void setKeyAtIdx(int idx, uid_t cllr_id, unsigned int k0, unsigned int k
 		pairs[idx].k0 = k0;
 		pairs[idx].k1 = k1;
 	}
-	printTable();
+	//printTable();
 }
 
 
@@ -199,7 +205,7 @@ PRIVATE void setKeyAtIdx(int idx, uid_t cllr_id, unsigned int k0, unsigned int k
  
  PUBLIC int fs_setkey(void) {
 	 //some other sys call tells us the following: 
-	printf("in fs_setkey (mfs)\n");
+	//printf("in fs_setkey (mfs)\n");
 	uid_t caller_uid = (uid_t) fs_m_in.REQ_UID;
 	
 	unsigned int k0 = fs_m_in.m2_i1;

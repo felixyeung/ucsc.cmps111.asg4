@@ -1,3 +1,9 @@
+/* 
+ * Adam Poit (apoit@ucsc.edu)
+ * Shang Hua Wu (swu14@ucsc.edu)
+ * Felix Yeung (fyeung@ucsc.edu)
+ */
+
 /* This file contains the file system call table.
  *
  * Created:

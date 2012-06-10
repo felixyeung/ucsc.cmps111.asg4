@@ -1,3 +1,9 @@
+/* 
+ * Adam Poit (apoit@ucsc.edu)
+ * Shang Hua Wu (swu14@ucsc.edu)
+ * Felix Yeung (fyeung@ucsc.edu)
+ */
+
 #ifndef __MINIX_VFSIF_H
 #define __MINIX_VFSIF_H
 

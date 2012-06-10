@@ -30,7 +30,7 @@ PUBLIC int do_setkey()
   unsigned int k1_m = m_in.m2_i2;
   //uid_t uid = m_in.m2_i3;
   
-  printf("in do_setkey\n");
+  //printf("in do_setkey\n");
 
   
   for (int i = 0; i < NR_MNTS; i++) {
@@ -39,7 +39,7 @@ PUBLIC int do_setkey()
   }
   
 
-  printf("out of req_setkey\n");
+  //printf("out of req_setkey\n");
   
   return(r);
   
