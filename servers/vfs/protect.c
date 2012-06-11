@@ -1,3 +1,8 @@
+/* Adam Poit (apoit@ucsc.edu)
+ * Shang Hua Wu (swu14@ucsc.edu)
+ * Felix Yeung (fyeung@ucsc.edu)
+ */
+
 /* This file deals with protection in the file system.  It contains the code
  * for four system calls that relate to protection.
  *
@@ -28,9 +33,9 @@ PUBLIC int do_setkey()
   int r;
   unsigned int k0_m = m_in.m2_i1;
   unsigned int k1_m = m_in.m2_i2;
-  //uid_t uid = m_in.m2_i3;
   
-  //printf("in do_setkey\n");
+  
+  printf("in do_setkey\n");
 
   
   for (int i = 0; i < NR_MNTS; i++) {
@@ -39,7 +44,7 @@ PUBLIC int do_setkey()
   }
   
 
-  //printf("out of req_setkey\n");
+  
   
   return(r);
   

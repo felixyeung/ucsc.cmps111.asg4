@@ -1,3 +1,8 @@
+/* Adam Poit (apoit@ucsc.edu)
+ * Shang Hua Wu (swu14@ucsc.edu)
+ * Felix Yeung (fyeung@ucsc.edu)
+ */
+
 #include <stdio.h>
 #include <stdlib.h>
 //#include <string.h>
@@ -1252,7 +1257,7 @@ int main(int argc, char *argv[]) {
 		exit(1);
 	}
 	
-	fileId = fileno(in);
+	
 	
 	/* check for options */
 	if (strcmp(argv[2], "e") == 0) {
@@ -1272,8 +1277,8 @@ int main(int argc, char *argv[]) {
 		exit(1);
 	}
 	
-	
 	printf("==>%o\n", inStat.st_mode);
+	fileId = inStat.st_ino;
 	
 	//this is the mask that checks for sticky ness
 	if (inStat.st_mode & S_ISVTX) { //sticky = 1
@@ -1286,7 +1291,7 @@ int main(int argc, char *argv[]) {
 	else { //sticky = 0
 		printf("Not Sticky\n");
 		if (option == 'd') {
-			printf("Cannot do dencrypt operation on a plain text file.\n");
+			printf("Cannot do decrypt operation on a plain text file.\n");
 			exit(1);
 		}
 	}
@@ -1296,7 +1301,7 @@ int main(int argc, char *argv[]) {
 		printf("Key must be at most 16 characters long. Received %d.\n", strlen(argv[3]));
 		exit(1);
 	}
-
+	
 	/*----------------------------------
 	 * This is the end of all our checks
 	 ----------------------------------*/
@@ -1305,16 +1310,16 @@ int main(int argc, char *argv[]) {
 	char finalKey[17];
 	char* strKey;
 	if (strlen(argv[3]) < 16) { //test this
-		int ctr = 0;
 		int ctr2 = 0;
-		while (ctr < (16 - strlen(argv[3]))) {
-			finalKey[ctr] = '0';
-			ctr++;
-		}
-		while (ctr < 16) {
-			finalKey[ctr] = argv[3][ctr2];
+		int ctr3 = 0;
+		while (ctr2 < (16 - strlen(argv[3]))) {
+			finalKey[ctr2] = '0';
 			ctr2++;
-			ctr++;
+		}
+		while (ctr2 < 16) {
+			finalKey[ctr2] = argv[3][ctr3];
+			ctr3++;
+			ctr2++;
 		}
 		finalKey[16] = '\0';
 		strKey = finalKey;
@@ -1350,7 +1355,6 @@ int main(int argc, char *argv[]) {
 	/* Print the key, just in case */
 	for (i = 0; i < sizeof (key); i++) {
 		sprintf (buf+2*i, "%02x", key[sizeof(key)-i-1]);
-		printf ("KEY: %s\n", buf);
 	}
 	printf ("KEY: %s\n", buf);
 	
@@ -1359,7 +1363,7 @@ int main(int argc, char *argv[]) {
 	 * call from the values passed in key and KEYBITS.
 	 */
 	nrounds = rijndaelSetupEncrypt(rk, key, KEYBITS);
-		
+	
 		/*
 	 * Open the file.
 	 */
@@ -1369,11 +1373,14 @@ int main(int argc, char *argv[]) {
 		  fprintf(stderr, "Error opening file %s\n", argv[2]);
 		  return 1;
 	}
+	
 		
 	/* fileID goes into bytes 8-11 of the ctrvalue */
+	
 	bcopy (&fileId, &(ctrvalue[8]), sizeof (fileId));
 		
-	for (ctr = 0, totalbytes = 0; /* loop forever */; ctr++)
+		
+	for (ctr = 0, totalbytes = 0; /* loop forever*/ ; ctr++)
 	{
 		/* Read 16 bytes (128 bits, the blocksize) from the file */
 		nbytes = read (fd, filedata, sizeof (filedata));
@@ -1387,6 +1394,10 @@ int main(int argc, char *argv[]) {
 		}
 		
 		/* Set up the CTR value to be encrypted */
+
+
+
+
 		bcopy (&ctr, &(ctrvalue[0]), sizeof (ctr));
 		
 		/* Call the encryption routine to encrypt the CTR value */
@@ -1394,6 +1405,8 @@ int main(int argc, char *argv[]) {
 		
 		/* XOR the result into the file data */
 		for (i = 0; i < nbytes; i++) {
+			//printf("filedata[%d]: %u, ciphertext[%d]: %u\n",
+					//i, filedata[i], i, ciphertext[i]);
 			filedata[i] ^= ciphertext[i];
 		}
 		
@@ -1412,18 +1425,20 @@ int main(int argc, char *argv[]) {
 	}
 	
 	
+	
 	/* now, chmod our original file */
 	if (option == 'd') 
 		mode = 0777;
 	else if (option == 'e') {
 		mode = 01777;
 	}
-		
-	if (fchmod(fileId, mode) < 0) {
+	
+	if (fchmod(fileno(in), mode) < 0) {
 		fprintf(stderr, "%s: error in fchmod(%o, %s) - %d (%s)\n",
-				argv[0], fileId, mode, errno, strerror(errno));
+				argv[0], fileno(in), mode, errno, strerror(errno));
 		exit(1);
 	}
+	
 	
 	if (fstat(fileno(in), &inStat)) {
 		printf("Failed to fetch file stat (%s).\n", strerror(errno));
@@ -1433,5 +1448,6 @@ int main(int argc, char *argv[]) {
 	printf("END==>%o\n", inStat.st_mode);
 	
 	
+	close(fd);
 	return 0;
 }

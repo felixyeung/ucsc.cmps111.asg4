@@ -21,11 +21,16 @@ cp include/minix/vfsif.h /usr/src/include/minix/vfsif.h
 
 cp include/setkey.h /usr/include/setkey.h
 
+cp include/callnr.h /usr/include/minix/callnr.h
+cp include/vfsif.h /usr/include/minix/vfsif.h
+
+cp stdlib.h /usr/pkg/gcc44/lib/gcc/i386-pc-minix/4.4.6/include-fixed
+
+cd /usr/src
+make libraries
 cd /usr/src/servers
 make
 make install
-cd /usr/src
-make libraries
 cd /usr/src/tools
 make hdboot
 make install

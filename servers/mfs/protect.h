@@ -1,3 +1,8 @@
+/* Adam Poit (apoit@ucsc.edu)
+ * Shang Hua Wu (swu14@ucsc.edu)
+ * Felix Yeung (fyeung@ucsc.edu)
+ */
+
 #ifndef _PROTECT_H_
 #define _PROTECT_H_
 

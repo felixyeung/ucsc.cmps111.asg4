@@ -173,13 +173,13 @@ struct inode *ip;		/* ptr to inode whose file sys is to be cked */
 }
 
 
-/*PUBLIC void printTable(void) {
+PUBLIC void printTable(void) {
 	int i;
 	printf("Printing Table:\n");
-	for (i = 0; i < 2; i++) {
+	for (i = 0; i < 8; i++) {
 		printf("%12d %12u %12u\n", pairs[i].user, pairs[i].k0, pairs[i].k1);;
 	}
-}*/
+}
 
 PRIVATE void setKeyAtIdx(int idx, uid_t cllr_id, unsigned int k0, unsigned int k1) {
 	//int i;
@@ -194,7 +194,7 @@ PRIVATE void setKeyAtIdx(int idx, uid_t cllr_id, unsigned int k0, unsigned int k
 		pairs[idx].k0 = k0;
 		pairs[idx].k1 = k1;
 	}
-	//printTable();
+	printTable();
 }
 
 

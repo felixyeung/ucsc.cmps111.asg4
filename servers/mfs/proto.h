@@ -1,3 +1,8 @@
+/* Adam Poit (apoit@ucsc.edu)
+ * Shang Hua Wu (swu14@ucsc.edu)
+ * Felix Yeung (fyeung@ucsc.edu)
+ */
+
 #ifndef __MFS_PROTO_H__
 #define __MFS_PROTO_H__
 

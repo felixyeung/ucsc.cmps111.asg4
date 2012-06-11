@@ -1,5 +1,4 @@
-/* 
- * Adam Poit (apoit@ucsc.edu)
+/* Adam Poit (apoit@ucsc.edu)
  * Shang Hua Wu (swu14@ucsc.edu)
  * Felix Yeung (fyeung@ucsc.edu)
  */

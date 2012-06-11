@@ -1,3 +1,8 @@
+/* Adam Poit (apoit@ucsc.edu)
+ * Shang Hua Wu (swu14@ucsc.edu)
+ * Felix Yeung (fyeung@ucsc.edu)
+ */
+
 /* This file contains the wrapper functions for issuing a request
  * and receiving response from FS processes.
  * Each function builds a request message according to the request
@@ -36,7 +41,7 @@ PUBLIC int req_setkey(int fs_e, unsigned int k0, unsigned int k1/*, uid_t uid*/)
   m.m_type = REQ_SETKEY;
   m.m2_i1 = k0;
   m.m2_i2 = k1;
-  //m.m2_i3 = uid;
+  
  
   r = fs_sendrec(fs_e, &m);
   

@@ -1,3 +1,8 @@
+/* Adam Poit (apoit@ucsc.edu)
+ * Shang Hua Wu (swu14@ucsc.edu)
+ * Felix Yeung (fyeung@ucsc.edu)
+ */
+
 #include "fs.h"
 #include <stddef.h>
 #include <string.h>
@@ -1469,6 +1474,7 @@ uid_t caller;
 		break;
 	}
   }
+	
 
   if(encrypting) {
     /* Set up the key */
@@ -1484,13 +1490,6 @@ uid_t caller;
 	
     /* fileID goes into bytes 8-11 of the ctrvalue */
     bcopy (&fileId, &(ctrvalue[8]), sizeof (fileId));
-	
-    /* Set up the CTR value to be encrypted */
-    ctr = (int) position / (int) chunk;
-    bcopy (&ctr, &(ctrvalue[0]), sizeof (ctr));
-	
-    /* Call the encryption routine to encrypt the CTR value */
-    rijndaelEncrypt(rk, nrounds, ctrvalue, ciphertext);
   }
 
   *completed = 0;
@@ -1544,7 +1543,16 @@ uid_t caller;
 	/* Decrypt the data */
 	if((i_mode & S_ISVTX) && encrypting) {
 		for (i = 0; i < chunk; i++) {
-			bp->b_data[off + i] ^= ciphertext[i];
+			/* Set up the CTR value to be encrypted */
+			ctr = ((int)position + i) / 16;
+			bcopy (&ctr, &(ctrvalue[0]), sizeof (ctr));
+			bzero (&(ctrvalue[4]), sizeof(int));
+			bzero (&(ctrvalue[12]), sizeof(int));
+			
+			/* Call the encryption routine to encrypt the CTR value */
+			rijndaelEncrypt(rk, nrounds, ctrvalue, ciphertext);
+			
+			bp->b_data[off + i] ^= ciphertext[((int)position + i) % 16];
 		}
 	}
 	
@@ -1555,7 +1563,16 @@ uid_t caller;
 	/* Re-encrypt the data */
 	if((i_mode & S_ISVTX) && encrypting) {
 		for (i = 0; i < chunk; i++) {
-			bp->b_data[off + i] ^= ciphertext[i];
+			/* Set up the CTR value to be encrypted */
+			ctr = ((int)position + i) / 16;
+			bcopy (&ctr, &(ctrvalue[0]), sizeof (ctr));
+			bzero (&(ctrvalue[4]), sizeof(int));
+			bzero (&(ctrvalue[12]), sizeof(int));
+			
+			/* Call the encryption routine to encrypt the CTR value */
+			rijndaelEncrypt(rk, nrounds, ctrvalue, ciphertext);
+			
+			bp->b_data[off + i] ^= ciphertext[((int)position + i) % 16];
 		}
 	}
   } else if(!block_write_ok(bp)) {
@@ -1570,7 +1587,16 @@ uid_t caller;
 	/* Encrypt the data */
 	if((i_mode & S_ISVTX) && encrypting) {
 		for (i = 0; i < chunk; i++) {
-			bp->b_data[off + i] ^= ciphertext[i];
+			/* Set up the CTR value to be encrypted */
+			ctr = ((int)position + i) / 16;
+			bcopy (&ctr, &(ctrvalue[0]), sizeof (ctr));
+			bzero (&(ctrvalue[4]), sizeof(int));
+			bzero (&(ctrvalue[12]), sizeof(int));
+			
+			/* Call the encryption routine to encrypt the CTR value */
+			rijndaelEncrypt(rk, nrounds, ctrvalue, ciphertext);
+			
+			bp->b_data[off + i] ^= ciphertext[((int)position + i) % 16];
 		}
 	}
 	  
